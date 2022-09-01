@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista Pendientes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <section class="sect-tareaPendiente">
+            <h1>¿Que necesitas hacer?</h1> <!-- what needs to be done? -->
+            <form action="#" id="formTarea">
+                <input type="text" id="tarea" class="tarea" autocomplete="off">
+                <input type="submit" value="Add" id="btnAdd" class="btnAdd">
+            </form>
+        </section>
+        <section class="sect-lista" id="sect-lista">
+            <div class="btn-all-active-comple">
+                <button type="submit" class="btnOptions" id="all"> All </button>
+                <button type="submit" class="btnOptions" id="active"> Active </button>
+                <button type="submit" class="btnOptions" id="completed"> Completed </button>
+            </div>
+            <p id="numTasks"></p>
+
+            <!-- <p id="numTasks">numeros de tasks</p> P-LISTO
+
+            <div class="div-check-tarea id="div-check-tarea""> DIV-LISTO
+                <input type="checkbox" name="checkSeleccionar" id="checkSeleccionar" class="checkSeleccionar"> CHACK-LISTO
+                <p id="nameTarea" class="nameTarea">nombre tarea</p> P-LISTO
+            </div> COMPLETADO
+
+            <div class="div-btn-edit-delete" id="div-btn-edit-delete">
+                <button id="btnEdit" class="btnEdit">edit</button>
+                <button id="btnDelete" class="btnDelete">delete</button>
+            </div> -->
+        </section>
+    </main>
+    <script src="code.js"></script>
+</body>
+</html>
