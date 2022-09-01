@@ -65,8 +65,18 @@ function eliminar(botonEl) {
     contador("",botonEl)
 }
 
+function editarSubmit (inputEdi,acesoP){
+    if(inputEdi == ""){
+        alert("Campos vacio, por favor ingresar un valor")
+    }
+    else{
+        acesoP.textContent=inputEdi;
+    }
+    console.log(inputEdi);
+}
+
 // formulario.addEventListener("submit", editar);
-function edita(botonEd,inputEdi){
+function edita(botonEd){ // Al hacer clip en editar, el valor de P pasa al Input
     let acesoP = botonEd.target.parentNode.parentNode.childNodes[1];
     let valorElem = acesoP.textContent;
     let inputEdi = document.getElementById("tarea");
@@ -76,16 +86,6 @@ function edita(botonEd,inputEdi){
     
     // let tareaEdit = document.querySelector(".txtEdit"); // llamado de parrafoNameTarea
     // tareaEdit.textContent;
-}
-
-function editarSubmit (inputEdi,acesoP){
-    if(inputEdi == ""){
-        alert("Campos vacio, por favor ingresar un valor")
-    }
-    else{
-        acesoP.textContent=inputEdi;
-    }
-    console.log(inputEdi);
 }
 
 function limpiarFormulario() {
