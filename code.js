@@ -3,6 +3,10 @@ let balidarBtn = true;
 function crearItem(contador,nameTarea){
 // Elementos ya creados en el index.html
     const section = document.querySelector("#sect-lista");
+    // const btnActive = document.querySelector("#active");
+    // btnActive.addEventListener("click",activeBtn);
+    // const btnCompleted = document.querySelector("#completed");
+    // btnCompleted.addEventListener("click",completedBtn);
 // Creacion del div que contiene divTarea y divButton
     let divGlobalE = document.createElement("div");
 // Creacion del div que contiene el CHECKBOX y el texto de la TAREA
@@ -11,6 +15,7 @@ function crearItem(contador,nameTarea){
     let checkbox = document.createElement("input");
     checkbox.type="checkbox";
     checkbox.className="checkSeleccionar";
+    checkbox.addEventListener("change",valiCheck,false);
     let parrafoNameTarea = document.createElement("p");
     parrafoNameTarea.className="txtEdit";
     parrafoNameTarea.textContent=`${nameTarea}`;
@@ -55,6 +60,20 @@ function contador(e,botonEl){
     }
 }
 
+function valiCheck(e){
+    let ubicaCheck = e.target;
+    let check = ubicaCheck.checked;
+    let parrafoCounterTasks = document.getElementById("numTasks");
+    if(check){
+        numTasks -= 1
+        parrafoCounterTasks.textContent = `${numTasks} tasks remaining`;
+    }
+    if(check === false){
+        numTasks += 1
+        parrafoCounterTasks.textContent = `${numTasks} tasks remaining`;
+    }
+}
+
 function limpiarFormulario() {
     document.getElementById("tarea").value = '';
 }
@@ -63,6 +82,12 @@ function eliminar(botonEl) {
     botonEl.parentNode.parentNode.remove();
     contador("",botonEl)
 }
+
+// function activeBtn(e){
+    
+// }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 let accesoNameTarea;
 function editInput(botonEd){ // Al hacer clip en editar, el valor de P pasa al Input
