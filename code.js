@@ -48,13 +48,13 @@ function crearItem(contador,nameTarea){
 }
 
 let numTasks = 0;
-function contador(e,botonEl){
+function contador(envio,botonEl){
     let parrafoCounterTasks = document.getElementById("numTasks");
-    if(e.type){ // (e.type) me hace saber si la funcion se ejecuto
+    if(envio.type && numTasks >= 0){ // (e.type) me hace saber si la funcion se ejecuto
         numTasks += 1
         parrafoCounterTasks.textContent = `${numTasks} tasks remaining`; // si es necesario
     }
-    if(botonEl.type){
+    if(botonEl.type && numTasks > 0){
         numTasks -= 1
         parrafoCounterTasks.textContent = `${numTasks} tasks remaining`; // si es necesario
     }
@@ -79,7 +79,7 @@ function limpiarFormulario() {
 }
 
 function eliminar(botonEl) {
-    botonEl.parentNode.parentNode.remove();
+    botonEl.parentNode.parentNode.parentNode.remove();
     contador("",botonEl)
 }
 
