@@ -1,3 +1,4 @@
+let balidarBtn = true;
 
 function crearItem(contador,nameTarea){
 // Elementos ya creados en el index.html
@@ -13,18 +14,18 @@ function crearItem(contador,nameTarea){
     checkbox.className="checkSeleccionar";
     let parrafoNameTarea = document.createElement("p");
     parrafoNameTarea.className="txtEdit";
-    parrafoNameTarea.id="nameTarea";
+    parrafoNameTarea.id= `${contador}`;
     parrafoNameTarea.textContent=`${nameTarea}`;
 // creacion del div que contiene los BOTONES: Editar y Eliminar
     let divButton = document.createElement("div");
     divButton.className="div-btn-edit-delete";
     let buttonEdit = document.createElement("button");
     buttonEdit.textContent = "Edit";
-    buttonEdit.className="btnEdit txtEdit";
+    buttonEdit.className="btnEdit";
+    buttonEdit.id=`${contador}`;
     buttonEdit.addEventListener("click",(edita) 
         // console.log(e);
         // console.log(e.target.parentNode.parentNode.childNodes[1]);
-    
     );
     let buttonDelete = document.createElement("button");
     buttonDelete.textContent = "Delete";
@@ -65,25 +66,18 @@ function eliminar(botonEl) {
     contador("",botonEl)
 }
 
-function editarSubmit (inputEdi,acesoP){
-    if(inputEdi == ""){
-        alert("Campos vacio, por favor ingresar un valor")
-    }
-    else{
-        acesoP.textContent=inputEdi;
-    }
-    console.log(inputEdi);
-}
+
 
 // formulario.addEventListener("submit", editar);
+let acesoP;
 function edita(botonEd){ // Al hacer clip en editar, el valor de P pasa al Input
-    let acesoP = botonEd.target.parentNode.parentNode.childNodes[1];
+    balidarBtn = false;
+    acesoP = botonEd.target.parentNode.parentNode.childNodes[1];
     let valorElem = acesoP.textContent;
     let inputEdi = document.getElementById("tarea");
     inputEdi.value=valorElem;
     let btnUpdate = document.querySelector("#btnAdd"); // llamado del boton Add y cambiar a Editar
     btnUpdate.value="Editar";
-    
     // let tareaEdit = document.querySelector(".txtEdit"); // llamado de parrafoNameTarea
     // tareaEdit.textContent;
 }
@@ -92,12 +86,40 @@ function limpiarFormulario() {
     document.getElementById("tarea").value = '';
 }
 
+
+
 let formulario = document.getElementById("formTarea");
-formulario.addEventListener("submit", envio);
+formulario.addEventListener("submit", condi);
+
 function envio(e){
     let tareaPendiente = document.getElementById("tarea").value;
     contador(e,"")
     crearItem(numTasks,tareaPendiente);
     limpiarFormulario()
+    balidarBtn = true;
+}
+
+function editarSubmit (){
+    balidarBtn = true;
+    console.log(acesoP);
+    let inpuEdit = document.getElementById("tarea").value;
+    if(inpuEdit === ""){
+        alert("Campos vacio, por favor ingresar un valor")
+    }
+    else{
+        acesoP.textContent= `${inpuEdit}`; // innerHTML 
+        
+    }
+    let btnUpdate = document.querySelector("#btnAdd"); // llamado del boton Add y cambiar a Editar
+    btnUpdate.value="Add";
+}
+
+function condi(e){
     e.preventDefault();
+    if(balidarBtn===true){
+        envio(e);
+    }
+    else if(balidarBtn===false){
+        editarSubmit(e);
+    }
 }
