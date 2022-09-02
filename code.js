@@ -64,11 +64,11 @@ function valiCheck(e){
     let ubicaCheck = e.target;
     let check = ubicaCheck.checked;
     let parrafoCounterTasks = document.getElementById("numTasks");
-    if(check){
+    if(check === true && numTasks > 0){
         numTasks -= 1
         parrafoCounterTasks.textContent = `${numTasks} tasks remaining`;
     }
-    if(check === false){
+    if(check === false && numTasks >= 0){
         numTasks += 1
         parrafoCounterTasks.textContent = `${numTasks} tasks remaining`;
     }
@@ -80,7 +80,7 @@ function limpiarFormulario() {
 
 function eliminar(botonEl) {
     botonEl.parentNode.parentNode.parentNode.remove();
-    contador("",botonEl)
+    contador("",botonEl);
 }
 
 // function activeBtn(e){
@@ -117,7 +117,7 @@ function updateTarea(){
 
 function envio(e){
     let tareaPendiente = document.getElementById("tarea").value;
-    contador(e,"")
+    contador(e,"","","");
     crearItem(numTasks,tareaPendiente);
     limpiarFormulario()
     balidarBtn = true;
