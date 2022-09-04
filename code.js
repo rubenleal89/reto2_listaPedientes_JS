@@ -1,22 +1,34 @@
-let balidarBtn = true;
+let balidarBtnAdd = true;
+let numTasks = 0;
+let idCheck = 0;
+let btnActive = true;
+let validarFuntCheck = false;
 
-function crearItem(contador,nameTarea){
+function crearItem(contador,nameTarea,idCheck){  // ELIMINAR el parametro contador si no esta en uso
 // Elementos ya creados en el index.html
     const section = document.querySelector("#sect-lista");
-    // const btnActive = document.querySelector("#active");
-    // btnActive.addEventListener("click",activeBtn);
-    // const btnCompleted = document.querySelector("#completed");
-    // btnCompleted.addEventListener("click",completedBtn);
-// Creacion del div que contiene divTarea y divButton
-    let divGlobalE = document.createElement("div");
+    const btnAll = document.querySelector("#all");
+    btnAll.addEventListener("click",(e) => {
+        divTarea.style="display: flex;"
+    });
+
+    const btnActive = document.querySelector("#active");
+    btnActive.addEventListener("click", activeBtn);
+
+    const btnCompleted = document.querySelector("#completed");
+    btnCompleted.addEventListener("click",completedBtn);
+
 // Creacion del div que contiene el CHECKBOX y el texto de la TAREA
     let divTarea = document.createElement("div");
-    divTarea.className="div-check-tarea";
+    divTarea.className="div-check-tarea active";
+    // divTarea.id=`${contador}`;
     let checkbox = document.createElement("input");
     checkbox.type="checkbox";
+    checkbox.id=`check${idCheck}`;
     checkbox.className="checkSeleccionar";
     checkbox.addEventListener("change",valiCheck,false);
-    let parrafoNameTarea = document.createElement("p");
+    let parrafoNameTarea = document.createElement("label");
+    parrafoNameTarea.setAttribute("for",`check${idCheck}`)
     parrafoNameTarea.className="txtEdit";
     parrafoNameTarea.textContent=`${nameTarea}`;
 // creacion del div que contiene los BOTONES: Editar y Eliminar
@@ -37,8 +49,7 @@ function crearItem(contador,nameTarea){
     }
     );
 // Creacion de las insercion de los div a la seccion
-    section.insertAdjacentElement("beforeend",divGlobalE)
-    divGlobalE.insertAdjacentElement("beforeend",divTarea);
+    section.insertAdjacentElement("beforeend",divTarea)
 // Creacion de las inserciones de elementos a los Div
     divTarea.insertAdjacentElement("afterbegin",checkbox);
     divTarea.insertAdjacentElement("beforeend",parrafoNameTarea);
@@ -47,51 +58,78 @@ function crearItem(contador,nameTarea){
     divButton.insertAdjacentElement("beforeend",buttonDelete);
 }
 
-let numTasks = 0;
-function contador(envio,botonEl){
-    let parrafoCounterTasks = document.getElementById("numTasks");
-    if(envio.type && numTasks >= 0){ // (e.type) me hace saber si la funcion se ejecuto
-        numTasks += 1
-        parrafoCounterTasks.textContent = `${numTasks} tasks remaining`; // si es necesario
+function valiCheck(e){
+    validarFuntCheck = true;
+    let ubicaionDivCheck = e.target.parentNode;
+    let ubicaCheck = e.target;
+    let check = ubicaCheck.checked;
+    if(check){
+        ubicaionDivCheck.className="div-check-tarea completed";
+        // if(btnActive === false){
+        //     ubicaionDivCheck.className="div-check-tarea btnCompleted";
+        // }
+        // else{
+        //     ubicaionDivCheck.className="div-check-tarea completed";
+        // }
+        console.log(ubicaionDivCheck);
+        console.log(check);
     }
-    if(botonEl.type && numTasks > 0){
-        numTasks -= 1
-        parrafoCounterTasks.textContent = `${numTasks} tasks remaining`; // si es necesario
+    if(check == false){
+        ubicaionDivCheck.className="div-check-tarea active";
+        // if(btnActive === true){
+        //     ubicaionDivCheck.className="div-check-tarea btnActive";
+        // }
+        // else{
+        //     ubicaionDivCheck.className="div-check-tarea completed";
+        // }
+        console.log(ubicaionDivCheck);
+        console.log(check)
     }
 }
 
-function valiCheck(e){
-    let ubicaCheck = e.target;
-    let check = ubicaCheck.checked;
-    let parrafoCounterTasks = document.getElementById("numTasks");
-    if(check === true && numTasks > 0){
-        numTasks -= 1
-        parrafoCounterTasks.textContent = `${numTasks} tasks remaining`;
-    }
-    if(check === false && numTasks >= 0){
-        numTasks += 1
-        parrafoCounterTasks.textContent = `${numTasks} tasks remaining`;
-    }
+function completedBtn(e){
+    btnActive = false;
+    let list = document.querySelectorAll( 'div[class="div-check-tarea active"]' );
+        Array.prototype.forEach.call(list, function (item) {
+        item.style = "display: none";;
+    });
 }
+
+function activeBtn(e){
+    btnActive = true;
+    let list = document.querySelectorAll( 'div[class="div-check-tarea completed"]' );
+        Array.prototype.forEach.call(list, function (item) {
+        item.style = "display: none";;
+    });
+    // let ubicaionDivCheck = document.getElementsByClassName("completed");
+    // ubicaionDivCheck.className="div-check-tarea btnActive";
+    
+    // let divTareaNoCheck1 = document.querySelector(".completed");
+    // divTareaNoCheck1.style="background-color: rgb(236, 68, 68);";
+
+    // let divTareaNoCheck2 = document.getElementsByClassName("active");
+    // divTareaNoCheck2.style="background-color: blue;";
+}
+
+// le di ID+contador a cada divTarea creado
+// hacer que funcione el boton active con el ID del divTarea
 
 function limpiarFormulario() {
     document.getElementById("tarea").value = '';
 }
 
 function eliminar(botonEl) {
-    botonEl.parentNode.parentNode.parentNode.remove();
-    contador("",botonEl);
+    botonEl.parentNode.parentNode.remove();
+    let parrafoCounterTasks = document.getElementById("numTasks");
+    numTasks -= 1;
+    parrafoCounterTasks.textContent = `${numTasks} tasks remaining`;
 }
-
-// function activeBtn(e){
-    
-// }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 let accesoNameTarea;
 function editInput(botonEd){ // Al hacer clip en editar, el valor de P pasa al Input
-    balidarBtn = false;
+    balidarBtnAdd = false;
     accesoNameTarea = botonEd.target.parentNode.parentNode.childNodes[1]; // llamar al elemento P del nombre tarea
     let valorElem = accesoNameTarea.textContent;
     let inputEdi = document.getElementById("tarea");
@@ -101,7 +139,7 @@ function editInput(botonEd){ // Al hacer clip en editar, el valor de P pasa al I
 }
 
 function updateTarea(){
-    balidarBtn = true;
+    balidarBtnAdd = true;
     let inpuEdit = document.getElementById("tarea").value;
     if(inpuEdit === ""){
         alert("Campos vacio, por favor ingresar un valor")
@@ -117,20 +155,24 @@ function updateTarea(){
 
 function envio(e){
     let tareaPendiente = document.getElementById("tarea").value;
-    contador(e,"","","");
-    crearItem(numTasks,tareaPendiente);
+    // Se elimino el contador(e,"");   ELIMINAR COMENTARIO
+    crearItem(numTasks,tareaPendiente,idCheck);
     limpiarFormulario()
-    balidarBtn = true;
+    balidarBtnAdd = true;
 }
 
 let formulario = document.getElementById("formTarea");
 formulario.addEventListener("submit", onFunctions);
 function onFunctions(e){
     e.preventDefault();
-    if(balidarBtn===true){
+    let parrafoCounterTasks = document.getElementById("numTasks");
+    if(balidarBtnAdd===true){
         envio(e);
+        idCheck += 1;
+        numTasks += 1
+        parrafoCounterTasks.textContent = `${numTasks} tasks remaining`; 
     }
-    else if(balidarBtn===false){
+    else if(balidarBtnAdd===false){
         updateTarea(e);
     }
 }

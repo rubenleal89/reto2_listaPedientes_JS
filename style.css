@@ -97,3 +97,13 @@ h1, input{
     border: 2px solid red;
     margin-left: 5px;
 }
+
+.btnActive{
+    background-color: yellowgreen;
+    /* display: none; */
+}
+
+.btnCompleted{
+    background-color: aqua;
+    /* display: none; */
+}
