@@ -1,20 +1,14 @@
 let balidarBtnAdd = true;
 let numTasks = 0;
-let idCheck = 0;
-let btnActive = true;
-let validarFuntCheck = false;
+let btnActive;
 
-function crearItem(contador,nameTarea,idCheck){  // ELIMINAR el parametro contador si no esta en uso
+function crearItem(nameTarea){  // ELIMINAR el parametro contador si no esta en uso
 // Elementos ya creados en el index.html
     const section = document.querySelector("#sect-lista");
     const btnAll = document.querySelector("#all");
-    btnAll.addEventListener("click",(e) => {
-        divTarea.style="display: flex;"
-    });
-
+    btnAll.addEventListener("click",allBtn);
     const btnActive = document.querySelector("#active");
     btnActive.addEventListener("click", activeBtn);
-
     const btnCompleted = document.querySelector("#completed");
     btnCompleted.addEventListener("click",completedBtn);
 
@@ -24,11 +18,9 @@ function crearItem(contador,nameTarea,idCheck){  // ELIMINAR el parametro contad
     // divTarea.id=`${contador}`;
     let checkbox = document.createElement("input");
     checkbox.type="checkbox";
-    checkbox.id=`check${idCheck}`;
     checkbox.className="checkSeleccionar";
     checkbox.addEventListener("change",valiCheck,false);
     let parrafoNameTarea = document.createElement("label");
-    parrafoNameTarea.setAttribute("for",`check${idCheck}`)
     parrafoNameTarea.className="txtEdit";
     parrafoNameTarea.textContent=`${nameTarea}`;
 // creacion del div que contiene los BOTONES: Editar y Eliminar
@@ -37,17 +29,13 @@ function crearItem(contador,nameTarea,idCheck){  // ELIMINAR el parametro contad
     let buttonEdit = document.createElement("button");
     buttonEdit.textContent = "Edit";
     buttonEdit.className="btnEdit";
-    buttonEdit.addEventListener("click",(editInput) 
-        // console.log(e);
-        // console.log(e.target.parentNode.parentNode.childNodes[1]);
-    );
+    buttonEdit.addEventListener("click",(editInput));
     let buttonDelete = document.createElement("button");
     buttonDelete.textContent = "Delete";
     buttonDelete.className="btnDelete";
     buttonDelete.addEventListener("click",(e) => {
         eliminar(buttonDelete);
-    }
-    );
+    });
 // Creacion de las insercion de los div a la seccion
     section.insertAdjacentElement("beforeend",divTarea)
 // Creacion de las inserciones de elementos a los Div
@@ -59,48 +47,63 @@ function crearItem(contador,nameTarea,idCheck){  // ELIMINAR el parametro contad
 }
 
 function valiCheck(e){
-    validarFuntCheck = true;
     let ubicaionDivCheck = e.target.parentNode;
     let ubicaCheck = e.target;
     let check = ubicaCheck.checked;
     if(check){
-        ubicaionDivCheck.className="div-check-tarea completed";
+        if(btnActive === true){
+            ubicaionDivCheck.className="div-check-tarea completed displayNone";
+        }
+        else{
+            ubicaionDivCheck.className="div-check-tarea completed";
+        }
         // if(btnActive === false){
         //     ubicaionDivCheck.className="div-check-tarea btnCompleted";
         // }
         // else{
         //     ubicaionDivCheck.className="div-check-tarea completed";
         // }
-        console.log(ubicaionDivCheck);
-        console.log(check);
     }
     if(check == false){
-        ubicaionDivCheck.className="div-check-tarea active";
+        if(btnActive === false){
+            ubicaionDivCheck.className="div-check-tarea active displayNone";
+        }
+        else{
+            ubicaionDivCheck.className="div-check-tarea active";
+        }
         // if(btnActive === true){
         //     ubicaionDivCheck.className="div-check-tarea btnActive";
         // }
         // else{
         //     ubicaionDivCheck.className="div-check-tarea completed";
         // }
-        console.log(ubicaionDivCheck);
-        console.log(check)
     }
 }
 
 function completedBtn(e){
     btnActive = false;
-    let list = document.querySelectorAll( 'div[class="div-check-tarea active"]' );
-        Array.prototype.forEach.call(list, function (item) {
-        item.style = "display: none";;
+    balidarBtnAdd = null;
+    let active = document.querySelectorAll( '.active' );
+        Array.prototype.forEach.call(active, function (item) {
+        item.className="div-check-tarea active displayNone"
+    });
+    let completed = document.querySelectorAll( '.completed' );
+        Array.prototype.forEach.call(completed, function (item) {
+        item.className="div-check-tarea completed displayFlex";
     });
 }
 
 function activeBtn(e){
     btnActive = true;
-    let list = document.querySelectorAll( 'div[class="div-check-tarea completed"]' );
-        Array.prototype.forEach.call(list, function (item) {
-        item.style = "display: none";;
+    let completed = document.querySelectorAll( '.completed' );
+        Array.prototype.forEach.call(completed, function (item) {
+        item.className="div-check-tarea completed displayNone";
     });
+    let active = document.querySelectorAll( '.active' );
+        Array.prototype.forEach.call(active, function (item) {
+        item.className="div-check-tarea active displayFlex";
+    });
+    {
     // let ubicaionDivCheck = document.getElementsByClassName("completed");
     // ubicaionDivCheck.className="div-check-tarea btnActive";
     
@@ -109,10 +112,21 @@ function activeBtn(e){
 
     // let divTareaNoCheck2 = document.getElementsByClassName("active");
     // divTareaNoCheck2.style="background-color: blue;";
+    }
 }
 
-// le di ID+contador a cada divTarea creado
-// hacer que funcione el boton active con el ID del divTarea
+function allBtn(){
+    btnActive = null;
+    balidarBtnAdd=true;
+    let completed = document.querySelectorAll( '.completed' );
+        Array.prototype.forEach.call(completed, function (item) {
+        item.className="div-check-tarea completed displayFlex";
+    });
+    let active = document.querySelectorAll( '.active' );
+        Array.prototype.forEach.call(active, function (item) {
+        item.className="div-check-tarea active displayFlex";
+    });
+}
 
 function limpiarFormulario() {
     document.getElementById("tarea").value = '';
@@ -155,8 +169,7 @@ function updateTarea(){
 
 function envio(e){
     let tareaPendiente = document.getElementById("tarea").value;
-    // Se elimino el contador(e,"");   ELIMINAR COMENTARIO
-    crearItem(numTasks,tareaPendiente,idCheck);
+    crearItem(tareaPendiente);
     limpiarFormulario()
     balidarBtnAdd = true;
 }
@@ -168,11 +181,16 @@ function onFunctions(e){
     let parrafoCounterTasks = document.getElementById("numTasks");
     if(balidarBtnAdd===true){
         envio(e);
-        idCheck += 1;
         numTasks += 1
-        parrafoCounterTasks.textContent = `${numTasks} tasks remaining`; 
+        parrafoCounterTasks.textContent = `${numTasks} tasks remaining`;
     }
     else if(balidarBtnAdd===false){
         updateTarea(e);
+    }
+    else{
+        envio(e);
+        numTasks += 1
+        parrafoCounterTasks.textContent = `${numTasks} tasks remaining`; 
+        completedBtn(e);
     }
 }

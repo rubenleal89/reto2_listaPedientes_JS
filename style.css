@@ -98,12 +98,15 @@ h1, input{
     margin-left: 5px;
 }
 
-.btnActive{
-    background-color: yellowgreen;
-    /* display: none; */
+.active{
+    /* background: blueviolet; */
+    display: flex;
 }
 
-.btnCompleted{
-    background-color: aqua;
-    /* display: none; */
+.displayNone{
+    display: none;
+}
+
+.displayFlex{
+    display: flex;
 }
