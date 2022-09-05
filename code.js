@@ -2,7 +2,7 @@ let balidarBtnAdd = true;
 let numTasks = 0;
 let btnActive;
 
-function crearItem(nameTarea){  // ELIMINAR el parametro contador si no esta en uso
+function crearItem(nameTarea){
 // Elementos ya creados en el index.html
     const section = document.querySelector("#sect-lista");
     const btnAll = document.querySelector("#all");
@@ -15,7 +15,6 @@ function crearItem(nameTarea){  // ELIMINAR el parametro contador si no esta en 
 // Creacion del div que contiene el CHECKBOX y el texto de la TAREA
     let divTarea = document.createElement("div");
     divTarea.className="div-check-tarea active";
-    // divTarea.id=`${contador}`;
     let checkbox = document.createElement("input");
     checkbox.type="checkbox";
     checkbox.className="checkSeleccionar";
@@ -95,6 +94,7 @@ function completedBtn(e){
 
 function activeBtn(e){
     btnActive = true;
+    balidarBtnAdd = true;
     let completed = document.querySelectorAll( '.completed' );
         Array.prototype.forEach.call(completed, function (item) {
         item.className="div-check-tarea completed displayNone";

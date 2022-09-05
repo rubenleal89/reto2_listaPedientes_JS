@@ -99,7 +99,6 @@ h1, input{
 }
 
 .active{
-    /* background: blueviolet; */
     display: flex;
 }
 
