@@ -1,6 +1,8 @@
 let balidarBtnAdd = true;
 let numTasks = 0;
 let btnActive;
+let tasksCompleted;
+let tasksActive;
 
 function crearItem(nameTarea){
 // Elementos ya creados en el index.html
@@ -49,7 +51,12 @@ function valiCheck(e){
     let ubicaionDivCheck = e.target.parentNode;
     let ubicaCheck = e.target;
     let check = ubicaCheck.checked;
+    tasksActive = document.getElementById("numTasksActive");
+    tasksCompleted = document.getElementById("numTasksCompleted");
     if(check){
+        numCompleted += 1;
+        tasksCompleted.textContent = `${numCompleted} completed tasks`;
+        tasksActive.textContent = `${numTasks-numCompleted} active tasks`;
         if(btnActive === true){
             ubicaionDivCheck.className="div-check-tarea completed displayNone";
         }
@@ -64,6 +71,9 @@ function valiCheck(e){
         // }
     }
     if(check == false){
+        numCompleted -= 1;
+        tasksCompleted.textContent = `${numCompleted} completed tasks`;
+        tasksActive.textContent = `${numTasks-numCompleted} active tasks`;
         if(btnActive === false){
             ubicaionDivCheck.className="div-check-tarea active displayNone";
         }
@@ -78,7 +88,7 @@ function valiCheck(e){
         // }
     }
 }
-
+let numCompleted=0;
 function completedBtn(e){
     btnActive = false;
     balidarBtnAdd = null;
@@ -90,6 +100,12 @@ function completedBtn(e){
         Array.prototype.forEach.call(completed, function (item) {
         item.className="div-check-tarea completed displayFlex";
     });
+    let tasksTotal = document.getElementById("numTasks");
+    tasksTotal.className="displayNone"
+    let tasksActive = document.getElementById("numTasksActive");
+    tasksActive.className="displayNone"
+    let tasksCompleted = document.getElementById("numTasksCompleted");
+    tasksCompleted.className="displayFlex"
 }
 
 function activeBtn(e){
@@ -103,6 +119,12 @@ function activeBtn(e){
         Array.prototype.forEach.call(active, function (item) {
         item.className="div-check-tarea active displayFlex";
     });
+    let tasksTotal = document.getElementById("numTasks");
+    tasksTotal.className="displayNone"
+    let tasksActive = document.getElementById("numTasksActive");
+    tasksActive.className="displayFlex"
+    let tasksCompleted = document.getElementById("numTasksCompleted");
+    tasksCompleted.className="displayNone"
     {
     // let ubicaionDivCheck = document.getElementsByClassName("completed");
     // ubicaionDivCheck.className="div-check-tarea btnActive";
@@ -126,6 +148,12 @@ function allBtn(){
         Array.prototype.forEach.call(active, function (item) {
         item.className="div-check-tarea active displayFlex";
     });
+    let tasksTotal = document.getElementById("numTasks");
+    tasksTotal.className="displayFlex"
+    let tasksActive = document.getElementById("numTasksActive");
+    tasksActive.className="displayNone"
+    let tasksCompleted = document.getElementById("numTasksCompleted");
+    tasksCompleted.className="displayNone"
 }
 
 function limpiarFormulario() {
@@ -133,10 +161,17 @@ function limpiarFormulario() {
 }
 
 function eliminar(botonEl) {
+    
     botonEl.parentNode.parentNode.remove();
     let parrafoCounterTasks = document.getElementById("numTasks");
     numTasks -= 1;
     parrafoCounterTasks.textContent = `${numTasks} tasks remaining`;
+    if(btnActive === true){
+        tasksActive.textContent = `${(numTasks-numCompleted)} active tasks`;
+    }
+    else{
+        tasksCompleted.textContent = `${numCompleted-=1} completed tasks`;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,7 +195,6 @@ function updateTarea(){
     }
     else{
         accesoNameTarea.textContent= `${inpuEdit}`;
-        
     }
     let btnUpdate = document.querySelector("#btnAdd"); // llamado del boton Add y cambiar a Editar
     btnUpdate.value="Add";
