@@ -1,5 +1,6 @@
 let balidarBtnAdd = true;
 let numTasks = 0;
+let numCompleted=0;
 let btnActive;
 let tasksCompleted;
 let tasksActive;
@@ -88,7 +89,7 @@ function valiCheck(e){
         // }
     }
 }
-let numCompleted=0;
+
 function completedBtn(e){
     btnActive = false;
     balidarBtnAdd = null;
@@ -162,15 +163,21 @@ function limpiarFormulario() {
 
 function eliminar(botonEl) {
     
-    botonEl.parentNode.parentNode.remove();
+    let divElimi = botonEl.parentNode.parentNode;
+    divElimi.remove()
     let parrafoCounterTasks = document.getElementById("numTasks");
+    let contadorVali = divElimi.className
+    
     numTasks -= 1;
-    parrafoCounterTasks.textContent = `${numTasks} tasks remaining`;
-    if(btnActive === true){
-        tasksActive.textContent = `${(numTasks-numCompleted)} active tasks`;
+    parrafoCounterTasks.textContent = `${numTasks} total tasks`;
+
+    if(contadorVali.includes("active")){
+        tasksActive.textContent = `${numTasks-numCompleted} active tasks`;
+        console.log("siiii")
     }
-    else{
+    if(contadorVali.includes("completed")){
         tasksCompleted.textContent = `${numCompleted-=1} completed tasks`;
+        console.log("nooo")
     }
 }
 
@@ -190,11 +197,11 @@ function editInput(botonEd){ // Al hacer clip en editar, el valor de P pasa al I
 function updateTarea(){
     balidarBtnAdd = true;
     let inpuEdit = document.getElementById("tarea").value;
-    if(inpuEdit === ""){
-        alert("Campos vacio, por favor ingresar un valor")
+    if(/^\S/.test(inpuEdit) && !/^[0-9]+$/.test(inpuEdit) && /^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(inpuEdit)){
+        accesoNameTarea.textContent= `${inpuEdit}`;
     }
     else{
-        accesoNameTarea.textContent= `${inpuEdit}`;
+        alert("No se permiten numeros y caracteres especiales")
     }
     let btnUpdate = document.querySelector("#btnAdd"); // llamado del boton Add y cambiar a Editar
     btnUpdate.value="Add";
@@ -203,28 +210,43 @@ function updateTarea(){
 
 function envio(e){
     let tareaPendiente = document.getElementById("tarea").value;
-    crearItem(tareaPendiente);
-    limpiarFormulario()
-    balidarBtnAdd = true;
+    validarInpunt(tareaPendiente);
+}
+
+function validarInpunt(tareaPendiente){
+    let placeholderInput = document.getElementById("tarea");
+    if(/^\S/.test(tareaPendiente) && !/^[0-9]+$/.test(tareaPendiente) && /^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(tareaPendiente)){
+        placeholderInput.placeholder="Ingrese una nueva tarea"
+        crearItem(tareaPendiente);
+        limpiarFormulario()
+        balidarBtnAdd = true;
+        numTasks += 1
+    }
+    else{
+        placeholderInput.placeholder="No se permiten numeros y caracteres especiales"
+        limpiarFormulario();
+    }
 }
 
 let formulario = document.getElementById("formTarea");
 formulario.addEventListener("submit", onFunctions);
 function onFunctions(e){
     e.preventDefault();
+    tasksActive = document.getElementById("numTasksActive");
     let parrafoCounterTasks = document.getElementById("numTasks");
     if(balidarBtnAdd===true){
         envio(e);
-        numTasks += 1
-        parrafoCounterTasks.textContent = `${numTasks} tasks remaining`;
+        parrafoCounterTasks.textContent = `${numTasks} total tasks`;
+        tasksActive.textContent = `${numTasks-numCompleted} active tasks`;
     }
     else if(balidarBtnAdd===false){
         updateTarea(e);
     }
     else{
         envio(e);
-        numTasks += 1
-        parrafoCounterTasks.textContent = `${numTasks} tasks remaining`; 
+        // numTasks += 1
+        parrafoCounterTasks.textContent = `${numTasks} total tasks`; 
+        tasksActive.textContent = `${numTasks-numCompleted} active tasks`;
         completedBtn(e);
     }
 }
