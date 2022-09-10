@@ -1,14 +1,13 @@
 let balidarBtnAdd = true;
-let accesoNameTarea;
+let validarTareasCheck = null; // ejecuta la function crearElemnts()
 let idEditar;
 let arrayTareasLocal = [];
-let estadoTarea = "active";
 
 function addElemenArray(Nomtareas){
     let tareas ={
         nameTask: Nomtareas,
         iD: identificador(),
-        estado: estadoTarea,
+        estado: "active",
     }
     arrayTareasLocal.push(tareas);
 }
@@ -22,30 +21,41 @@ function identificador(){
 
 function crearElemnts(){
     // debugger
-    arrayTareasLocal=JSON.parse(localStorage.getItem("Formulario Tarea")); // Trae los valores del local
+    let arrayTasks;
+    if(validarTareasCheck === null){ // Validar que boton se oprimio e imprimir su array
+        arrayTasks = JSON.parse(localStorage.getItem("Formulario Tarea"));
+    }
+    else if(validarTareasCheck === false){
+        arrayTasks = JSON.parse(localStorage.getItem("Active Task")); // Trae los valores del local
+    }
+    else{
+        arrayTasks = JSON.parse(localStorage.getItem("Completed Task")); 
+    }
     let section = document.querySelector("#sect-tareas");
     section.innerHTML="";
-    if(arrayTareasLocal=== null){
+    if(arrayTasks=== null){
+        arrayTasks=[];
         arrayTareasLocal=[];
     }
     else{
-        arrayTareasLocal.forEach(element => {
+        arrayTareasLocal = JSON.parse(localStorage.getItem("Formulario Tarea"));
+        arrayTasks.forEach(element => {
 // Elementos ya creados en el index.html
             let btnAll = document.querySelector("#all");
             btnAll.addEventListener("click",allBtn);
             let btnActive = document.querySelector("#active");
             btnActive.addEventListener("click", activeBtn);
             let btnCompleted = document.querySelector("#completed");
-            // btnCompleted.addEventListener("click",completedBtn);
+            btnCompleted.addEventListener("click",completedBtn);
 // Creacion del div que contiene el CHECKBOX y el texto de la TAREA
             let divTarea = document.createElement("div");
             divTarea.className="div-check-tarea active";
             let checkbox = document.createElement("input");
             checkbox.type="checkbox";
             checkbox.className="checkSeleccionar";
+            checkbox.setAttribute(element.estado,element.estado); // Atributo para que el check quede activo
             checkbox.addEventListener("change",(e) => {
-                validacionCheck(checkbox,element.iD)
-            },false);
+                validacionCheck(checkbox,element.iD)},false);
             let parrafoNameTarea = document.createElement("label");
             parrafoNameTarea.className="txtEdit";
             parrafoNameTarea.textContent=element.nameTask;
@@ -76,25 +86,47 @@ function crearElemnts(){
     }
 }
 
+function allBtn(){
+    validarTareasCheck = null;
+    crearElemnts();
+}
+
+function activeBtn(){
+    let arrayActive = arrayTareasLocal.filter(element => element.estado === "active");
+    localStorage.setItem("Active Task",JSON.stringify(arrayActive));
+    validarTareasCheck = false;
+    crearElemnts();
+}
+
+function completedBtn(){
+    let arrayCompleted = arrayTareasLocal.filter(element => element.estado === "checked");
+    localStorage.setItem("Completed Task",JSON.stringify(arrayCompleted));
+    validarTareasCheck = true;
+    crearElemnts();
+}
 
 function validacionCheck(e,id){
     let check = e.checked;
-
     if(check){
-        estadoTarea = "completed"
+        // console.log(e);
         arrayTareasLocal.forEach( element => {
             if(element.iD === id){
-                element.estado = estadoTarea;
+                element.estado = "checked";
                 localStorage.setItem("Formulario Tarea",JSON.stringify(arrayTareasLocal));
+                if(validarTareasCheck === false){
+                    window.onload = activeBtn(); // Vuelve y ejecuta la funcion indicada
+                }
             }
         })
     }
     if(check === false){
-        estadoTarea = "active"
         arrayTareasLocal.forEach( element => {
             if(element.iD === id){
-                element.estado = estadoTarea;
+                element.estado = "active";
                 localStorage.setItem("Formulario Tarea",JSON.stringify(arrayTareasLocal));
+                if(validarTareasCheck === true){
+                    window.onload = completedBtn(); // Vuelve y ejecuta la funcion indicada
+                }
             }
         })
     }
@@ -118,7 +150,7 @@ function eliminarLocal(e,id){
 
 function editarInput(e,id){ // Al hacer clip en editar, el valor del Span pasa al Input
     balidarBtnAdd = false;
-    accesoNameTarea = e.target.parentNode.parentNode.childNodes[1]; // llamar al elemento P del nombre tarea
+    let accesoNameTarea = e.target.parentNode.parentNode.childNodes[1]; // llamar al elemento P del nombre tarea
     let valorElem = accesoNameTarea.textContent;
     let inputEdi = document.getElementById("tarea");
     inputEdi.value=valorElem;
@@ -155,6 +187,7 @@ function envio(e){
     localStorage.setItem("Formulario Tarea",JSON.stringify(arrayTareasLocal)); // Se esta guardando los elemtos del array en el local
     crearElemnts();
     limpiarFormulario();
+    validarTareasCheck = null;
 }
 
 let formulario = document.getElementById("formTarea");
