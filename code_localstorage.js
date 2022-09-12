@@ -3,7 +3,6 @@ let validarTareasCheck = null; // ejecuta la function crearElemnts()
 let idEditar;
 let arrayTareasLocal = [];
 let numTareas;
-let numTasks = document.querySelector("#numTasks");
 
 function addElemenArray(Nomtareas){
     let tareas ={
@@ -24,6 +23,7 @@ function identificador(){
 function crearElemnts(){
     // debugger
     let arrayTasks;
+    let numTasks = document.querySelector("#numTasks");
     if(validarTareasCheck === null){ // Validar que boton se oprimio e imprimir su array
         arrayTasks = JSON.parse(localStorage.getItem("Formulario Tarea"));
     }
@@ -41,7 +41,7 @@ function crearElemnts(){
     }
     else{
         numTareas = arrayTasks.length;
-        numTasks.textContent=`Total Tasks ${numTareas}`;
+        numTasks.textContent=`Number of tasks: ${numTareas}`;
         arrayTareasLocal = JSON.parse(localStorage.getItem("Formulario Tarea"));
         arrayTasks.forEach(element => {
 // Elementos ya creados en el index.html
@@ -112,7 +112,6 @@ function completedBtn(){
 function validacionCheck(e,id){
     let check = e.checked;
     if(check){
-        // console.log(e);
         arrayTareasLocal.forEach( element => {
             if(element.iD === id){
                 element.estado = "checked";
@@ -208,23 +207,15 @@ let formulario = document.getElementById("formTarea");
 formulario.addEventListener("submit", onFunctions);
 function onFunctions(e){
     e.preventDefault();
-    // tasksActive = document.getElementById("numTasksActive");
-    // let parrafoCounterTasks = document.getElementById("numTasks");
     if(balidarBtnAdd===true){
         envio(e);
-        // parrafoCounterTasks.textContent = `${numTasks} total tasks`;
-        // tasksActive.textContent = `${numTasks-numCompleted} active tasks`;
     }
     else if(balidarBtnAdd===false){
         editarTareas(e);
     }
     else{
         envio(e);
-        // parrafoCounterTasks.textContent = `${numTasks} total tasks`; 
-        // tasksActive.textContent = `${numTasks-numCompleted} active tasks`;
-        // completedBtn(e);
     }
 }
-
 
 document.addEventListener('DOMContentLoaded',crearElemnts); // (DOMContentLoaded) cuando recargue el contenido del DOM vuelva e imprima
