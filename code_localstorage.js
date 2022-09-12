@@ -2,6 +2,8 @@ let balidarBtnAdd = true;
 let validarTareasCheck = null; // ejecuta la function crearElemnts()
 let idEditar;
 let arrayTareasLocal = [];
+let numTareas;
+let numTasks = document.querySelector("#numTasks");
 
 function addElemenArray(Nomtareas){
     let tareas ={
@@ -28,7 +30,7 @@ function crearElemnts(){
     else if(validarTareasCheck === false){
         arrayTasks = JSON.parse(localStorage.getItem("Active Task")); // Trae los valores del local
     }
-    else{
+    else if (validarTareasCheck === true){
         arrayTasks = JSON.parse(localStorage.getItem("Completed Task")); 
     }
     let section = document.querySelector("#sect-tareas");
@@ -38,6 +40,8 @@ function crearElemnts(){
         arrayTareasLocal=[];
     }
     else{
+        numTareas = arrayTasks.length;
+        numTasks.textContent=`Total Tasks ${numTareas}`;
         arrayTareasLocal = JSON.parse(localStorage.getItem("Formulario Tarea"));
         arrayTasks.forEach(element => {
 // Elementos ya creados en el index.html
@@ -146,6 +150,16 @@ function eliminarLocal(e,id){
     arrayTareasLocal = datosjson.filter((e) => e.iD !== id) //con filter creo un nuevo array
 
     localStorage.setItem("Formulario Tarea",JSON.stringify(arrayTareasLocal)); // el nuevo array creado se guarda en el local
+
+    if(validarTareasCheck === false){
+        window.onload = activeBtn(); // Vuelve y ejecuta la funcion indicada
+    }
+    else if(validarTareasCheck === true){
+        window.onload = completedBtn(); // Vuelve y ejecuta la funcion indicada
+    }
+    else{
+        window.onload = allBtn();
+    }
 }
 
 function editarInput(e,id){ // Al hacer clip en editar, el valor del Span pasa al Input
