@@ -10,7 +10,7 @@ function addElemenArray(Nomtareas){
         iD: identificador(),
         estado: "active",
         invalidarBtnEdit: "funcional",
-        placeholder: "fff",
+        placeholder: "",
     }
     arrayTareasLocal.push(tareas);
 }
@@ -157,7 +157,7 @@ function validacionCheck(e,id){
             }
         })
     }
-    window.onload = allBtn();
+    window.onload = crearElemnts();
 }
 
 function btnTextArea(e,id){
