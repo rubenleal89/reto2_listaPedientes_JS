@@ -9,6 +9,8 @@ function addElemenArray(Nomtareas){
         nameTask: Nomtareas,
         iD: identificador(),
         estado: "active",
+        invalidarBtnEdit: "funcional",
+        placeholder: "fff",
     }
     arrayTareasLocal.push(tareas);
 }
@@ -54,6 +56,7 @@ function crearElemnts(){
 // Creacion del div que contiene el CHECKBOX y el texto de la TAREA
             let divTarea = document.createElement("div");
             divTarea.className="div-check-tarea active";
+            divTarea.id="div-check-tarea";
             let checkbox = document.createElement("input");
             checkbox.type="checkbox";
             checkbox.className="checkSeleccionar";
@@ -69,6 +72,7 @@ function crearElemnts(){
             let buttonEdit = document.createElement("button");
             buttonEdit.textContent = "Edit";
             buttonEdit.className="btnEdit";
+            buttonEdit.id="btnEdit"
             buttonEdit.addEventListener("click",(e) => {
                 editarInput(e,element.iD)
             });
@@ -78,11 +82,30 @@ function crearElemnts(){
             buttonDelete.addEventListener("click",(e) => {
                 eliminarLocal(buttonDelete, element.iD);
             });
+// Creacion del Inpus cuando esta checkeado y bloqueo del boton editar
+            if(element.estado==="checked"){
+                let textArea = document.createElement("textarea");
+                textArea.className="textArea";
+                let buttonText = document.createElement("button");
+                buttonText.className="buttonText";
+                buttonText.textContent="✓";
+                buttonText.addEventListener("click",(e)=>{
+                    btnTextArea(e,element.iD);
+            })
+                divTarea.insertAdjacentElement("afterbegin",buttonText);
+                divTarea.insertAdjacentElement("afterbegin",textArea);
+
+                if(element.invalidarBtnEdit === "bloqueado"){
+                    buttonEdit.setAttribute("disabled","");
+                    textArea.setAttribute("disabled","");
+                    textArea.setAttribute("placeholder",element.placeholder)
+                }
+            }
 // Creacion de las insercion de los div a la seccion
             section.insertAdjacentElement("beforeend",divTarea);
 // Creacion de las inserciones de elementos a los Div
+            divTarea.insertAdjacentElement("afterbegin",parrafoNameTarea);
             divTarea.insertAdjacentElement("afterbegin",checkbox);
-            divTarea.insertAdjacentElement("beforeend",parrafoNameTarea);
             divTarea.insertAdjacentElement("beforeend",divButton);
             divButton.insertAdjacentElement("beforeend",buttonEdit);
             divButton.insertAdjacentElement("beforeend",buttonDelete);
@@ -126,6 +149,7 @@ function validacionCheck(e,id){
         arrayTareasLocal.forEach( element => {
             if(element.iD === id){
                 element.estado = "active";
+                element.invalidarBtnEdit="funcional";
                 localStorage.setItem("Formulario Tarea",JSON.stringify(arrayTareasLocal));
                 if(validarTareasCheck === true){
                     window.onload = completedBtn(); // Vuelve y ejecuta la funcion indicada
@@ -133,6 +157,20 @@ function validacionCheck(e,id){
             }
         })
     }
+    window.onload = allBtn();
+}
+
+function btnTextArea(e,id){
+    let textArea = e.target.parentNode.childNodes[2];
+    console.log(textArea.value);
+    arrayTareasLocal.forEach(element => {
+        if(element.iD === id){
+            element.invalidarBtnEdit="bloqueado";
+            element.placeholder=textArea.value;
+            localStorage.setItem("Formulario Tarea",JSON.stringify(arrayTareasLocal));
+        }
+    })
+    window.onload = crearElemnts();
 }
 
 function limpiarFormulario() {

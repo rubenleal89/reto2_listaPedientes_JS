@@ -65,11 +65,25 @@ h1, input{
     width: 40px;
     height: 40px;
 }
+
+.buttonText{    /* Adaptado al Reto 2*/
+    width: 15%;
+    border-radius: 10px;
+}
+
+.textArea{  /* Adaptado al Reto 2*/
+    resize: none;
+    height: 50px;
+    width: 50%;
+    border-radius: 10px;
+    padding: 10px;
+}
+
 .div-check-tarea{
     display: flex;
-    flex-direction: column; /*Antes no estaba*/
-    /* align-items: center; */
+    align-items: center; /* Adaptado al Reto 2*/
     gap: 10px;
+    flex-wrap: wrap;  /* Adaptado al Reto 2*/
 }
 
 .btn-edit-delete{
@@ -80,6 +94,7 @@ h1, input{
 .div-btn-edit-delete{
     display: flex;
     justify-content: space-between;
+    width: 100%;
 }
 
 .div-btn-edit-delete button{
